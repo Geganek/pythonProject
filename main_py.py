@@ -1,5 +1,5 @@
 from turtle import *
-def pirat():
+def p ():
     speed(10)
     left(90)
     forward(50)
@@ -73,7 +73,6 @@ def pirat():
     forward(50)
     left(90)
     forward(30)
-
 
 
 exitonclick()
