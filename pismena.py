@@ -67,6 +67,6 @@ def pismeno_o (velikost):
 
 
 
-speed(10)
-pismeno_o(20)
+
+
 exitonclick()
