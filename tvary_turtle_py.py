@@ -27,16 +27,4 @@ def otazka_i_to_ostatni():
         ctverec()
     elif a==("kruh"):
         kruh()
-def pismeno_p ():
-    speed(10)
-    left(90)
-    forward(50)
-    right(90)
-    forward(25)
-    right(90)
-    forward(20)
-    right(90)
-    forward(25)
-    left(90)
-pismeno_p()
 exitonclick()

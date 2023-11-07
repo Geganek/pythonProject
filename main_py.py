@@ -73,6 +73,6 @@ def p ():
     forward(50)
     left(90)
     forward(30)
-
+p()
 
 exitonclick()
