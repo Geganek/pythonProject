@@ -62,11 +62,4 @@ def pismeno_o (velikost):
     forward(2*velikost)
     pendown()
 
-
-
-
-
-
-
-
 exitonclick()

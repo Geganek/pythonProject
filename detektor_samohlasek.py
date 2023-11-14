@@ -21,7 +21,6 @@ for i in napis:
 
 
 
-
 print("počet souhlásek:",(pocet_souhlasek))
 print("počet samohlásek:",(pocet_samohlasek))
 print("počet mezer:",pocet_mezer)
