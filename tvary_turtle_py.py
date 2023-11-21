@@ -27,4 +27,5 @@ def otazka_i_to_ostatni():
         ctverec()
     elif a==("kruh"):
         kruh()
+
 exitonclick()
