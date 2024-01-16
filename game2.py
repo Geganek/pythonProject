@@ -43,7 +43,7 @@ while not hotovo():
         elif zlato[hrac] and vstup=="x":
             vstup_ok=True
         elif hrac==4 and vstup=="j":
-            sytost=10
+            vstup_ok=True
         elif vstup=="r" and hrac==1 and zamcene_chodby[hrac]:
             vstup_ok=True
         elif je_cislo(vstup) and int(vstup) <= len(kam_lze_jit) and int(vstup) > 0:
@@ -55,6 +55,9 @@ while not hotovo():
     elif vstup == "c":
         inventar["klic"] = True
         mistnost_s_klicem = -1
+    elif hrac==4 and vstup=="j":
+        sytost=11
+
     elif vstup == "r":
         cilova_mistnost = zamcene_chodby[hrac].pop()
         chodby[hrac].append(cilova_mistnost)
@@ -67,4 +70,5 @@ while not hotovo():
     if sytost == 0:
         print("umřels hlady")
         break
-print("Gratuluju, sebral jsi celkem,", skore, "zlata za", kroky, "kroků")
+if sytost > 0:
+    print("Gratuluju, sebral jsi celkem,", skore, "zlata za", kroky, "kroků")
