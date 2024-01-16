@@ -1,6 +1,7 @@
-mistnosti = ["obývák", "chodba", "sklep", "trůnní sál","jidelna"]
-chodby = [[1, 2], [0], [0], [1, 2,4],[3]]
-zamcene_chodby = [[], [3], [], []]
+mistnosti = ["obývák", "chodba", "sklep", "trůnní sál","jídelna"]
+chodby = [[1, 2], [0,4], [0], [1, 2],[1]]
+zamcene_chodby = [[], [3], [], [],[]]
+sytost=5
 klic = 2
 
 zlato = [1, 0, 10, 300,15]
@@ -9,7 +10,6 @@ hrac = 0
 skore = 0
 kroky = 0
 ma_klic = False
-
 def je_cislo(mozna_cislo):
     try:
         int(mozna_cislo)
@@ -20,6 +20,7 @@ def hotovo():
     return sum(zlato) == 0
 
 while not hotovo():
+
     print("hráč je v místnosti:", mistnosti[hrac])
     print("hráč má", skore, "zlata")
     print("zbývá zlata:", sum(zlato))
@@ -37,6 +38,9 @@ while not hotovo():
     if ma_klic and zamcene_chodby[hrac]:
         print("Moznost R : odemknout dveře ->", mistnosti[zamcene_chodby[hrac][-1]])
 
+    if hrac == 4:
+        print("moznost J: najíst se")
+
 
 
     vstup_ok=False
@@ -46,6 +50,9 @@ while not hotovo():
             vstup_ok=True
         elif zlato[hrac] and vstup=="x":
             vstup_ok=True
+        elif hrac==4 and vstup=="j":
+            sytost=10
+
         elif vstup=="r" and hrac==1 and zamcene_chodby[hrac]:
             vstup_ok=True
         elif je_cislo(vstup) and int(vstup) <= len(kam_lze_jit) and int(vstup) > 0:
@@ -64,6 +71,10 @@ while not hotovo():
         print("Slyšíš jak cvaknul zámek a dveře se otevřely.")
     else:
         hrac = kam_lze_jit[int(vstup) - 1]
-
+    sytost-=1
     kroky += 1
+    if sytost == 0:
+        print("umřels hlady")
+        break
+
 print("Gratuluju, sebral jsi celkem,", skore, "zlata za", kroky, "kroků")
