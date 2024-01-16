@@ -53,7 +53,7 @@ while not hotovo():
         skore += zlato[hrac]
         zlato[hrac] = 0
     elif vstup == "c":
-        mistnost_s_klicem = True
+        inventar["klic"] = True
         mistnost_s_klicem = -1
     elif vstup == "r":
         cilova_mistnost = zamcene_chodby[hrac].pop()
