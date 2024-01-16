@@ -1,9 +1,9 @@
-mistnosti = ["obývák", "chodba", "sklep", "trůnní sál"]
-chodby = [[1, 2], [0], [0], [1, 2]]
+mistnosti = ["obývák", "chodba", "sklep", "trůnní sál","jidelna"]
+chodby = [[1, 2], [0], [0], [1, 2,4],[3]]
 zamcene_chodby = [[], [3], [], []]
 klic = 2
 
-zlato = [1, 0, 10, 300]
+zlato = [1, 0, 10, 300,15]
 
 hrac = 0
 skore = 0
