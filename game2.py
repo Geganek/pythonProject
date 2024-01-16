@@ -1,4 +1,3 @@
-
 mistnosti = ["obývák", "chodba", "sklep", "trůnní sál"]
 chodby = [[1, 2], [0], [0], [1, 2]]
 zamcene_chodby = [[], [3], [], []]
@@ -49,7 +48,7 @@ while not hotovo():
             vstup_ok=True
         elif vstup=="r" and hrac==1 and zamcene_chodby[hrac]:
             vstup_ok=True
-        elif je_cislo(vstup) and int(vstup)-1 <= len(kam_lze_jit):
+        elif je_cislo(vstup) and int(vstup) <= len(kam_lze_jit) and int(vstup) > 0:
             vstup_ok=True
 
 
@@ -67,5 +66,4 @@ while not hotovo():
         hrac = kam_lze_jit[int(vstup) - 1]
 
     kroky += 1
-
 print("Gratuluju, sebral jsi celkem,", skore, "zlata za", kroky, "kroků")
