@@ -20,7 +20,7 @@ def hotovo():
     return sum(zlato) == 0
 
 while not hotovo():
-
+    print("mas sytost",sytost)
     print("hráč je v místnosti:", mistnosti[hrac])
     print("hráč má", skore, "zlata")
     print("zbývá zlata:", sum(zlato))
