@@ -1,86 +1,113 @@
-mistnosti = ["obývák", "chodba", "sklep", "trůnní sál","jídelna"]
-chodby = [[1, 2,4], [0,4], [0], [1, 2],[1,0]]
-zamcene_chodby = [[], [3], [], [],[]]
-inventar = {"klic" : False, "moje zlato":0,"burger":False}
-cena_burgeru=15
+import random
+from lokace import Hrad,Posta
+inventar = {"klic" : False, "moje zlato":0,"burger":False,"houbicka" : False}
 sytost=4
-mistnost_s_klicem = 2
-zlato = [1, 0, 10, 300,15]
-hrac = 0
-skore = 0
 kroky = 0
+dedecek_us_rekl=False
 
+hrad=Hrad()
+posta=Posta()
 def je_cislo(mozna_cislo):
     try:
         int(mozna_cislo)
         return True
     except ValueError:
         return False
-def hotovo():
-    return sum(zlato) == 0
-while not hotovo():
-    print("mas sytost",sytost)
-    if inventar["burger"]:
-        print("mas burger")
-    print("hráč je v místnosti:", mistnosti[hrac])
-    print("hráč má", skore, "zlata")
-    print("zbývá zlata:", sum(zlato))
-    kam_lze_jit = chodby[hrac]
+def hotovo(level):
+    return sum(level.zlato) == 0
 
-    for i, moznost in enumerate(kam_lze_jit):
-        print("Moznost", i + 1, ": ", mistnosti[moznost])
-    if zlato[hrac] > 0:
-        print("Moznost X : sebrat", zlato[hrac], "zlata")
-    if hrac == mistnost_s_klicem:
-        print("Moznost C : sebrat klíč")
-    if inventar["klic"] and zamcene_chodby[hrac]:
-        print("Moznost R : odemknout dveře ->", mistnosti[zamcene_chodby[hrac][-1]])
-    if hrac == 4 or inventar["burger"]:
-        print("moznost J: najíst se")
-    if hrac == 4 and inventar["moje zlato"] >= cena_burgeru:
-        print("prodavačka říká:Chceš burger?řekni b")
 
-    vstup_ok=False
-    while not vstup_ok:
+for level in [Hrad,Posta]:
+    hrac = 0
+
+    print("vytej v levelu",level.jmeno)
+    while not hotovo(level):
+        print("mas sytost",sytost)
+        if inventar["burger"]:
+            print("mas burger")
+        print("hráč je v místnosti:", level.mistnosti[hrac])
+        print("hráč má", inventar["moje zlato"], "zlata")
+        print("zbývá zlata:", sum(level.zlato))
+        kam_lze_jit = level.chodby[hrac]
+        ok_vstupy=[]
+
+        if hrac == 5 and inventar["moje zlato"]>=5 and not inventar["houbicka"]:
+            if not dedecek_us_rekl:
+                print("jsem moudry dedecek a dam ti houbicky kdyz uhodnes cislo od 1 do 10 a das mi 5 kc")
+                cislo=random.randint(1,10)
+                inventar["moje zlato"]-=5
+                dedecek_us_rekl=True
+
+            while True:
+                rekni_dedeckovi=input("cislo:")
+                if je_cislo(rekni_dedeckovi):
+                    dolnihranice=0
+                    hornihranice=11
+                    kroky=0
+
+                if int(rekni_dedeckovi) == cislo:
+                    print("mas houbicku")
+                    break
+                elif int(rekni_dedeckovi) > cislo:
+                    print("mislim si mensi cislo")
+                    hornihranice=(((hornihranice-dolnihranice)//2)+dolnihranice)
+                else:
+                    print("mislim si veci cislo")
+                    dolnihranice=(((hornihranice-dolnihranice)//2)+dolnihranice)
+                dedecek_us_rekl=False
+        for i, moznost in enumerate(kam_lze_jit):
+            print("Moznost", i + 1, ": ", level.mistnosti[moznost])
+            ok_vstupy.append(str(i+1))
+        if level.zlato[hrac] > 0:
+            print("Moznost X : sebrat", level.zlato[hrac], "zlata")
+            ok_vstupy.append("x")
+        if hrac == level.mistnost_s_klicem:
+            print("Moznost C : sebrat klíč")
+            ok_vstupy.append("c")
+        if inventar["klic"] and level.zamcene_chodby[hrac]:
+            print("Moznost R : odemknout dveře ->", level.mistnosti[level.zamcene_chodby[hrac][-1]])
+            ok_vstupy.append("r")
+        if hrac == 4 or inventar["burger"]:
+            print("moznost J: najíst se")
+            ok_vstupy.append("j")
+        if hrac == 4 and inventar["moje zlato"] >= level.cena_burgeru and not inventar["burger"]:
+            print("prodavačka říká:Chceš burger?řekni b")
+            ok_vstupy.append("b")
+
+
         vstup = input("> ")
-        if not inventar["klic"] and mistnost_s_klicem==hrac and vstup=="c":
-            vstup_ok=True
-        elif zlato[hrac] and vstup=="x":
-            vstup_ok=True
-        elif (hrac==4 or inventar["burger"]) and vstup=="j":
-            vstup_ok=True
-        elif vstup=="r" and hrac==1 and zamcene_chodby[hrac]:
-            vstup_ok=True
-        elif hrac == 4 and inventar["moje zlato"] >= cena_burgeru and not inventar["burger"] and vstup=="b":
-            vstup_ok=True
-        elif je_cislo(vstup) and int(vstup) <= len(kam_lze_jit) and int(vstup) > 0:
-            vstup_ok=True
+        while not vstup in ok_vstupy:
+            print("vyber nejakou moznost malymy pismeny:")
+            for i in range(len(ok_vstupy)):
+                print(ok_vstupy[i])
+            vstup = input("> ")
+        if vstup == "x":
+            inventar["moje zlato"] += level.zlato[hrac]
+            level.zlato[hrac] = 0
+        elif vstup == "c":
+            inventar["klic"] = True
+            mistnost_s_klicem = -1
+        elif vstup=="j":
+            sytost=11
 
-    if vstup == "x":
-        skore += zlato[hrac]
-        inventar["moje zlato"]+=zlato[hrac]
-        zlato[hrac] = 0
-    elif vstup == "c":
-        inventar["klic"] = True
-        mistnost_s_klicem = -1
-    elif vstup=="j":
-        sytost=11
-        if not hrac==4:
-            inventar["burger"]=False
-    elif vstup == "b":
-        inventar["burger"]=True
+            if not hrac==4:
+                inventar["burger"]=False
+        elif vstup == "b":
+            inventar["burger"]=True
+            inventar["moje zlato"]-=level.cena_burgeru
+        elif vstup == "r":
+            cilova_mistnost = level.zamcene_chodby[hrac].pop()
+            inventar["klic"]=False
+            level.chodby[hrac].append(cilova_mistnost)
+            print("Slyšíš jak cvaknul zámek a dveře se otevřely.")
+        else:
+            hrac = kam_lze_jit[int(vstup) - 1]
 
-    elif vstup == "r":
-        cilova_mistnost = zamcene_chodby[hrac].pop()
-        chodby[hrac].append(cilova_mistnost)
-        print("Slyšíš jak cvaknul zámek a dveře se otevřely.")
-    else:
-        hrac = kam_lze_jit[int(vstup) - 1]
+        sytost-=1
+        kroky += 1
+        if sytost == 0:
+            print("umřels hlady")
+            break
 
-    sytost-=1
-    kroky += 1
-    if sytost == 0:
-        print("umřels hlady")
-        break
-if sytost > 0:
-    print("Gratuluju, sebral jsi celkem,", skore, "zlata za", kroky, "kroků")
+    print("level",level.jmeno,"splnen")
+print("Gratuluju, sebral jsi celkem,", inventar["moje zlato"], "zlata za", kroky, "kroků")
