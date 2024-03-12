@@ -41,8 +41,7 @@ for level in [Hrad,Posta]:
             while True:
                 rekni_dedeckovi=input("cislo:")
                 if je_cislo(rekni_dedeckovi):
-                    dolnihranice=0
-                    hornihranice=11
+
                     kroky=0
 
                 if int(rekni_dedeckovi) == cislo:
@@ -50,10 +49,10 @@ for level in [Hrad,Posta]:
                     break
                 elif int(rekni_dedeckovi) > cislo:
                     print("mislim si mensi cislo")
-                    hornihranice=(((hornihranice-dolnihranice)//2)+dolnihranice)
+
                 else:
                     print("mislim si veci cislo")
-                    dolnihranice=(((hornihranice-dolnihranice)//2)+dolnihranice)
+
                 dedecek_us_rekl=False
         for i, moznost in enumerate(kam_lze_jit):
             print("Moznost", i + 1, ": ", level.mistnosti[moznost])
