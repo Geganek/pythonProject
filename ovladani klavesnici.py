@@ -8,6 +8,7 @@ viska_obrazu = 600
 viska = 30
 sirka = 60
 
+
 screen = pygame.display.set_mode((sirka_obrazu,viska_obrazu))
 
 up = pygame.K_w
