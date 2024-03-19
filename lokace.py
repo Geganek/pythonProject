@@ -15,4 +15,4 @@ class Posta:
     cena_burgeru = 20
     zlato = [1, 0, 10, 300,15]
     jmeno="hlavni posta"
-print()
+
