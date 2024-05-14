@@ -2,6 +2,8 @@ import pygame
 import sys
 import math
 
+## ahoj, tohle ti sem napsal tata
+
 # Inicializace pygame
 pygame.init()
 
@@ -14,6 +16,7 @@ GRAY = (128, 128, 128)
 DARK_GRAY = (64, 64, 64)
 WHITE = (255, 255, 255)
 DARK_WHITE = (128, 128, 128)
+
 
 # Tmavé odstíny
 DARK_BLUE = (0, 0, 128)
@@ -49,21 +52,42 @@ LIGHT_PINK = (255, 182, 193)
 LIGHT_BROWN = (210, 105, 30)
 
 
+def blitRotate(surf, image, pos, originPos, angle):
+    # offset from pivot to center
+    image_rect = image.get_rect(topleft=(pos[0] - originPos[0], pos[1] - originPos[1]))
+    offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
 
+    # roatated offset from pivot to center
+    rotated_offset = offset_center_to_pivot.rotate(-angle)
 
+    # roatetd image center
+    rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
 
+    # get a rotated image
+    rotated_image = pygame.transform.rotate(image, angle)
+    rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
+
+    # rotate and blit the image
+    surf.blit(rotated_image, rotated_image_rect)
+
+    # draw rectangle around the image
+
+    # pygame.draw.rect(surf, (255, 0, 0), (*rotated_image_rect.topleft, *rotated_image.get_size()), 2)
 
 
 strela = pygame.image.load("z0pq38qb.png")
 strela = pygame.transform.scale(strela, (36,9))
 
+
 def vystreli(screen, s):
     # Načtení obrázku tanku
 
     screen.blit(strela, s)
+def kulka(screen,k):
+    pygame.draw.rect(screen,GRAY,pygame.Rect(k[0],k[1],10,5))
 
 vysrelene_srely = []
-
+vystrelene_kulky = []
 
 def palma(screen):
     # Načtení obrázku tanku
@@ -75,9 +99,12 @@ def palma(screen):
 
 
 
-def nakresli_tank(screen):
+def nakresli_tank(screen, kamtocivim ):
     # Načtení obrázku tanku
-    screen.blit(tank, (x, y))
+
+    blitRotate(screen,tank,(x,y),(25,25),- kamtocivim / math.pi * 180)
+
+
 
 
 
@@ -89,6 +116,7 @@ def nakresli_tank(screen):
 
 clock = pygame.time.Clock()
 fps = 60
+fps_was = 0
 # Vytvoření okna
 screen = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption("hra")
@@ -104,6 +132,8 @@ doprava = pygame.K_d
 doleva = pygame.K_a
 
 vystrel = pygame.K_SPACE
+kulomet = pygame.K_LSHIFT
+kulomet_str = False
 
 y = 100
 x = 100
@@ -113,10 +143,13 @@ rychlost = 0
 
 
 s_rychlost = [20,0]
+k_rychlost = [20,0]
 
 kamtocumim = 0
 
+
 toceni = [0,0]
+
 
 
 charged = 0
@@ -126,10 +159,10 @@ chargebar_max = 60
 charge_increment = chargebar_max/charge_frames
 
 
-
 # Hlavní smyčka
 running = True
 while running:
+    fps_was += 1
 
     screen.fill(DARK_BROWN)
     for event in pygame.event.get():
@@ -147,6 +180,9 @@ while running:
                 toceni[0] = 0.04
             if event.key == doprava:
                 toceni[1] = 0.04
+            if event.key == kulomet:
+                kulomet_str = True
+
 
             if event.key == vystrel and charged >= chargebar_max:
                 s_pozice = [x + 40, y + 18]
@@ -164,7 +200,8 @@ while running:
                 toceni[0] = 0
             if event.key == doprava:
                 toceni[1] = 0
-
+            if event.key == kulomet:
+                kulomet_str = False
 
 
     # Vykreslení modrého pozadí
@@ -187,9 +224,27 @@ while running:
         y = HEIGHT - 30
 
 
+    if kulomet_str:
+        if charged >= chargebar_max/60:
+
+            charged -= chargebar_max/70
+
+            if fps_was%3 == 0:
+                  k_pozice = [x + 30, y + 15]
+                  vystrelene_kulky.append(k_pozice)
+        else:
+            charged = 0
+    for k in  vystrelene_kulky:
+        k[0] += k_rychlost[0]
+        kulka(screen,k)
+        if k[0] > 3000:
+            vystrelene_kulky.remove(k)
 
 
-    print(charged)
+
+
+
+
     pygame.draw.rect(screen,DARK_GRAY,pygame.Rect(x-9,y-23,chargebar_max+6,11))
     if charged < chargebar_max:
         charged += charge_increment
@@ -200,12 +255,15 @@ while running:
         pygame.draw.rect(screen,YELLOW,chargebar)
 
 
-
-
-
     # Vykreslení kámenem inspirovaného obrazce
-    nakresli_tank(screen)
+    nakresli_tank(screen, kamtocivim=kamtocumim)
+    print(kamtocumim)
+
+
     palma(screen)
+
+
+
 
 
 
