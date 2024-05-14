@@ -227,7 +227,7 @@ while running:
     if kulomet_str:
         if charged >= chargebar_max/60:
 
-            charged -= chargebar_max/70
+            charged -= chargebar_max/60
 
             if fps_was%3 == 0:
                   k_pozice = [x + 30, y + 15]
