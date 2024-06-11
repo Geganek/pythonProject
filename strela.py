@@ -31,3 +31,7 @@ class Strela:
         # kod kterej zmeni pozici o smer kazdy frame
         self.pozice[0] += self.rychlost * math.cos(self.smer)
         self.pozice[1] += self.rychlost * math.sin(self.smer)
+
+
+    def hitbox(self):
+        return pygame.Rect(self.pozice[0],self.pozice[1],7,7)
